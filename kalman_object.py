@@ -66,7 +66,7 @@ class kalman_object:
                 controls.append(self.control_vector)
             else:
                 controls.append([0 for x in range(len(self.control_vector))])
-        print(controls)
+        # print(controls)
         truths = self.truth_function(self.initial_state_vector, controls, self.num_measurements)
         measurements = self.measurement_function(truths, self.observation_error_list)
         covariances = [np.array(self.initial_P)]

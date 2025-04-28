@@ -12,7 +12,7 @@ import analysis_2D
 if __name__ == "__main__":
     # create kalman object (2d)
     # initial state
-    num_measurements = 100
+    num_measurements = 50
     x0 = 0
     y0 = 0
     vx0 = 10
@@ -52,9 +52,9 @@ if __name__ == "__main__":
 
     # run the kalman filter
     kalman_2d = kalman_object.kalman_object(num_measurements, initial_state, u, dt, observation_error, A, B, C, Q, w, R, P_prev, del_t, analysis_2D.generate_ground_truth_2D, analysis_2D.generate_measurements_2D)
-    print(kalman_2d)
+    # print(kalman_2d)
     kalman_results = kalman_2d.run_kalman_filter()
-    print(kalman_2d)
+    # print(kalman_2d)
 
 
     ### PLOT

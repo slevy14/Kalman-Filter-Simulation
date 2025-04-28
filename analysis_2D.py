@@ -7,6 +7,8 @@ from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
 import random
 
+endpoint = -1
+
 # create list of ground truth vectors [x, y, vx, vy]
 # control is a list of [ax, ay] for each timestep
 def generate_ground_truth_2D(initial_state, control, num_measurements):
@@ -40,7 +42,7 @@ def generate_measurements_2D(true_vals, errors):
 
 def create_covariance_ellipses(covariances, x_estimates, y_estimates):
     ellipses = []
-    print(len(x_estimates), len(covariances))
+    # print(len(x_estimates), len(covariances))
     for i in range(len(x_estimates)):
         cov = covariances[i]
         # just get the x and y covariance, upper left quadrant
@@ -57,6 +59,7 @@ def create_covariance_ellipses(covariances, x_estimates, y_estimates):
 
 # show graph of kalman data
 def show_graph(kalman_2d):
+    global endpoint
     # create figure
     fig, axs = plt.subplots()
     fig.set_figwidth(10)
@@ -89,7 +92,7 @@ def show_graph(kalman_2d):
 
     # sliders
     show_measurements_slider = Slider(plt.axes([0.25, 0.12, 0.65, 0.03]), 'Show Measurements:', 1, kalman_2d.num_measurements+1, valfmt='%0.0f', valstep=1, valinit=kalman_2d.num_measurements)
-    show_measurements_slider.on_changed(lambda val: show_measurements_count(int(val), truths, pred, meas, ests, kalman_2d, cov_plots, axs))
+    show_measurements_slider.on_changed(lambda val: show_measurements_count(int(val), truths, pred, meas, ests, kalman_2d, cov_plots, axs, fig))
 
     ## CHECKBOXES
     lines = [pred, meas, ests, truths]
@@ -102,10 +105,15 @@ def show_graph(kalman_2d):
     axs.set_xlabel("meters")
     axs.set_ylabel("meters")
 
+    ## BUTTON
+    measurement_button = Button(plt.axes([0.05, 0.2, 0.15, 0.05]), 'Re-Measure',)
+    measurement_button.on_clicked(lambda val: remeasure(endpoint, truths, pred, meas, ests, kalman_2d, cov_plots, axs, fig))
+
     # SHOW
     plt.show()
 
-def show_measurements_count(val, truths, pred, meas, ests, kalman_2d, covs, axs):
+def show_measurements_count(val, truths, pred, meas, ests, kalman_2d, covs, axs, fig):
+    global endpoint
     # print(val)
     endpoint = val
     truths.set_xdata(kalman_2d.truths.T[0][:endpoint])
@@ -125,6 +133,11 @@ def show_measurements_count(val, truths, pred, meas, ests, kalman_2d, covs, axs)
         covs.append(axs.plot(ellipsis[0], ellipsis[1], color="green"))
     axs.relim()
     axs.autoscale_view()
+    fig.canvas.draw_idle()
+
+def remeasure(val, truths, pred, meas, ests, kalman_2d, covs, axs, fig):
+    kalman_2d.run_kalman_filter()
+    show_measurements_count(val, truths, pred, meas, ests, kalman_2d, covs, axs, fig)
 
 def toggle_line(val, lines, labels, fig):
     index = labels.index(val)
