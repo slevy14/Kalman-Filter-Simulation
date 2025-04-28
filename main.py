@@ -53,6 +53,7 @@ if __name__ == "__main__":
     # run the kalman filter
     kalman_2d = kalman_object.kalman_object(num_measurements, initial_state, u, dt, observation_error, A, B, C, Q, w, R, P_prev, del_t, analysis_2D.generate_ground_truth_2D, analysis_2D.generate_measurements_2D)
     # print(kalman_2d)
+    kalman_2d.full_control = True
     kalman_results = kalman_2d.run_kalman_filter()
     # print(kalman_2d)
 

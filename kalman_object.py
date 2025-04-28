@@ -50,6 +50,7 @@ class kalman_object:
         self.estimations = None
         self.truths = None
         self.covariances = None
+        self.full_control = True
 
     def __str__(self):
         return "PREDICTIONS: \n-------------\n" + str(self.predictions) + "\n-------------\nMEASUREMENTS: \n-------------\n" + str(self.measurements) + "\n-------------\nESTIMATIONS: \n-------------\n" + str(self.estimations) + "\n-------------\nTRUTHS: \n-------------\n" + str(self.truths) + "\n-------------\nCovariances: \n-------------\n" + str(self.covariances)
@@ -60,12 +61,16 @@ class kalman_object:
         estimations = np.array([[x] for x in self.initial_state_vector])
         predictions = np.array([[x] for x in self.initial_state_vector])
         controls = []
-        for i in range(self.num_measurements):
-            # apply control for first half, then 0 for rest
-            if (i < self.num_measurements // 2):
+        if self.full_control:
+            for i in range(self.num_measurements):
                 controls.append(self.control_vector)
-            else:
-                controls.append([0 for x in range(len(self.control_vector))])
+        else:
+            for i in range(self.num_measurements):
+                # apply control for first half, then 0 for rest
+                if (i < self.num_measurements // 2):
+                    controls.append(self.control_vector)
+                else:
+                    controls.append([0 for x in range(len(self.control_vector))])
         # print(controls)
         truths = self.truth_function(self.initial_state_vector, controls, self.num_measurements)
         measurements = self.measurement_function(truths, self.observation_error_list)
