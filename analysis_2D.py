@@ -46,8 +46,8 @@ def create_covariance_ellipses(covariances, x_estimates, y_estimates):
     for i in range(len(x_estimates)):
         cov = covariances[i]
         # just get the x and y covariance, upper left quadrant
-        cov = cov[np.ix_([0,3],[0,3])]
-        # print("covariance of x and y ",i,":\n", cov)
+        cov = cov[0:2,0:2]
+        print("covariance of x and y ",i,":\n", cov)
         eigenvalues, eigenvectors = np.linalg.eig(cov)
         theta = np.linspace(0, 2*np.pi, 1000)
         # print((np.sqrt(eigenvalues[None,:]) * eigenvectors))
