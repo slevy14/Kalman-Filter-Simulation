@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from matplotlib.widgets import Button
 from matplotlib.widgets import CheckButtons
+from matplotlib.widgets import TextBox
 from matplotlib.patches import Ellipse
 import matplotlib.transforms as transforms
 import random
@@ -109,6 +110,23 @@ def show_graph(kalman_2d):
     axs.set_xlabel("meters")
     axs.set_ylabel("meters")
 
+    # textboxes
+    x0_input = TextBox(plt.axes([0.15, 0.09, 0.05, 0.025]), "initial x: ", 0)
+    x0_input.on_submit(lambda val: try_update_x0(val, kalman_2d))
+    y0_input = TextBox(plt.axes([0.15, 0.06, 0.05, 0.025]), "initial y: ", 0)
+    y0_input.on_submit(lambda val: try_update_y0(val, kalman_2d))
+
+    vx0_input = TextBox(plt.axes([0.30, 0.09, 0.05, 0.025]), "initial vx: ", 0)
+    vx0_input.on_submit(lambda val: try_update_vx0(val, kalman_2d))
+    vy0_input = TextBox(plt.axes([0.30, 0.06, 0.05, 0.025]), "initial vy: ", 0)
+    vy0_input.on_submit(lambda val: try_update_vy0(val, kalman_2d))
+
+    ax0_input = TextBox(plt.axes([0.45, 0.09, 0.05, 0.025]), "initial ax: ", 0)
+    ax0_input.on_submit(lambda val: try_update_ax0(val, kalman_2d))
+    ay0_input = TextBox(plt.axes([0.45, 0.06, 0.05, 0.025]), "initial ay: ", 0)
+    ay0_input.on_submit(lambda val: try_update_ay0(val, kalman_2d))
+
+
     ## BUTTON
     measurement_button = Button(plt.axes([0.05, 0.2, 0.15, 0.05]), 'Re-Measure',)
     measurement_button.on_clicked(lambda val: remeasure(endpoint, truths, pred, meas, ests, kalman_2d, cov_plots, axs, fig))
@@ -150,3 +168,47 @@ def toggle_line(val, lines, labels, fig):
 
 def toggle_full_control(val, kalman_2d):
     kalman_2d.full_control = not kalman_2d.full_control
+
+## TEXTBOX UPDATES
+
+def try_update_x0(val, kalman_2d):
+    try:
+        kalman_2d.initial_state_vector[0] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_y0(val, kalman_2d):
+    try:
+        kalman_2d.initial_state_vector[1] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_vx0(val, kalman_2d):
+    try:
+        kalman_2d.initial_state_vector[2] = float(str(val))
+    except:
+        print("not a float!")
+        return
+
+def try_update_vy0(val, kalman_2d):
+    try:
+        kalman_2d.initial_state_vector[3] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_ax0(val, kalman_2d):
+    try:
+        kalman_2d.control_vector[0] = float(str(val))
+    except:
+        print("not a float!")
+        return
+
+def try_update_ay0(val, kalman_2d):
+    try:
+        kalman_2d.control_vector[1] = float(str(val))
+    except:
+        print("not a float!")
+        return
