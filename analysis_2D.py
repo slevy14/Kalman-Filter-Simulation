@@ -92,7 +92,7 @@ def show_graph(kalman_2d):
         cov_plots.append(axs.plot(ellipsis[0], ellipsis[1], color="green"))
 
     # sliders
-    show_measurements_slider = Slider(plt.axes([0.25, 0.12, 0.65, 0.03]), 'Show Measurements:', 1, kalman_2d.num_measurements+1, valfmt='%0.0f', valstep=1, valinit=kalman_2d.num_measurements)
+    show_measurements_slider = Slider(plt.axes([0.25, 0.16, 0.65, 0.03]), 'Show Measurements:', 1, kalman_2d.num_measurements+1, valfmt='%0.0f', valstep=1, valinit=kalman_2d.num_measurements)
     show_measurements_slider.on_changed(lambda val: show_measurements_count(int(val), truths, pred, meas, ests, kalman_2d, cov_plots, axs, fig))
 
     ## CHECKBOXES
@@ -111,33 +111,50 @@ def show_graph(kalman_2d):
     axs.set_ylabel("meters")
 
     # textboxes
-    x0_input = TextBox(plt.axes([0.15, 0.09, 0.05, 0.025]), "initial x: ", kalman_2d.initial_state_vector[0])
+    box_left = 0.1
+    box_bottom = 0.12
+    box_vert_buffer = 0.03
+    box_horiz_buffer = 0.15
+    box_width = 0.05
+    box_height = 0.025
+    x0_input = TextBox(plt.axes([box_left, box_bottom, box_width, box_height]), "initial x: ", kalman_2d.initial_state_vector[0])
     x0_input.on_submit(lambda val: try_update_x0(val, kalman_2d))
-    y0_input = TextBox(plt.axes([0.15, 0.06, 0.05, 0.025]), "initial y: ", kalman_2d.initial_state_vector[1])
+    y0_input = TextBox(plt.axes([box_left, box_bottom-box_vert_buffer, box_width, box_height]), "initial y: ", kalman_2d.initial_state_vector[1])
     y0_input.on_submit(lambda val: try_update_y0(val, kalman_2d))
 
-    vx0_input = TextBox(plt.axes([0.30, 0.09, 0.05, 0.025]), "initial vx: ", kalman_2d.initial_state_vector[2])
+    vx0_input = TextBox(plt.axes([box_left+box_horiz_buffer, box_bottom, box_width, box_height]), "initial vx: ", kalman_2d.initial_state_vector[2])
     vx0_input.on_submit(lambda val: try_update_vx0(val, kalman_2d))
-    vy0_input = TextBox(plt.axes([0.30, 0.06, 0.05, 0.025]), "initial vy: ", kalman_2d.initial_state_vector[3])
+    vy0_input = TextBox(plt.axes([box_left+box_horiz_buffer, box_bottom-box_vert_buffer, box_width, box_height]), "initial vy: ", kalman_2d.initial_state_vector[3])
     vy0_input.on_submit(lambda val: try_update_vy0(val, kalman_2d))
 
-    ax0_input = TextBox(plt.axes([0.45, 0.09, 0.05, 0.025]), "initial ax: ", kalman_2d.control_vector[0])
+    ax0_input = TextBox(plt.axes([box_left+box_horiz_buffer*2, box_bottom, box_width, box_height]), "initial ax: ", kalman_2d.control_vector[0])
     ax0_input.on_submit(lambda val: try_update_ax0(val, kalman_2d))
-    ay0_input = TextBox(plt.axes([0.45, 0.06, 0.05, 0.025]), "initial ay: ", kalman_2d.control_vector[0])
+    ay0_input = TextBox(plt.axes([box_left+box_horiz_buffer*2, box_bottom-box_vert_buffer, box_width, box_height]), "initial ay: ", kalman_2d.control_vector[0])
     ay0_input.on_submit(lambda val: try_update_ay0(val, kalman_2d))
 
-    err_x_input = TextBox(plt.axes([0.60, 0.09, 0.05, 0.025]), "x error: ", kalman_2d.observation_error_list[0])
+    err_x_input = TextBox(plt.axes([box_left+box_horiz_buffer*3, box_bottom, box_width, box_height]), "x error: ", kalman_2d.observation_error_list[0])
     err_x_input.on_submit(lambda val: try_update_err_x(val, kalman_2d))
-    err_y_input = TextBox(plt.axes([0.60, 0.06, 0.05, 0.025]), "y error: ", kalman_2d.observation_error_list[1])
+    err_y_input = TextBox(plt.axes([box_left+box_horiz_buffer*3, box_bottom-box_vert_buffer, box_width, box_height]), "y error: ", kalman_2d.observation_error_list[1])
     err_y_input.on_submit(lambda val: try_update_err_y(val, kalman_2d))
 
-    err_vx_input = TextBox(plt.axes([0.75, 0.09, 0.05, 0.025]), "vx error: ", kalman_2d.observation_error_list[2])
+    err_vx_input = TextBox(plt.axes([box_left+box_horiz_buffer*4, box_bottom, box_width, box_height]), "vx error: ", kalman_2d.observation_error_list[2])
     err_vx_input.on_submit(lambda val: try_update_err_vx(val, kalman_2d))
-    err_vy_input = TextBox(plt.axes([0.75, 0.06, 0.05, 0.025]), "vy error: ", kalman_2d.observation_error_list[3])
+    err_vy_input = TextBox(plt.axes([box_left+box_horiz_buffer*4, box_bottom-box_vert_buffer, box_width, box_height]), "vy error: ", kalman_2d.observation_error_list[3])
     err_vy_input.on_submit(lambda val: try_update_err_vy(val, kalman_2d))
 
+    p_err_x_input = TextBox(plt.axes([box_left+box_horiz_buffer*5+0.02, box_bottom, box_width, box_height]), "x covariance: ", kalman_2d.initial_P[0][0])
+    p_err_x_input.on_submit(lambda val: try_update_p_err_x(val, kalman_2d))
+    p_err_y_input = TextBox(plt.axes([box_left+box_horiz_buffer*5+0.02, box_bottom-box_vert_buffer, box_width, box_height]), "y covariance: ", kalman_2d.initial_P[1][1])
+    p_err_y_input.on_submit(lambda val: try_update_p_err_y(val, kalman_2d))
+    p_err_vx_input = TextBox(plt.axes([box_left+box_horiz_buffer*5+0.02, box_bottom-box_vert_buffer*2, box_width, box_height]), "vx covariance: ", kalman_2d.initial_P[2][2])
+    p_err_vx_input.on_submit(lambda val: try_update_p_err_vx(val, kalman_2d))
+    p_err_vy_input = TextBox(plt.axes([box_left+box_horiz_buffer*5+0.02, box_bottom-box_vert_buffer*3, box_width, box_height]), "vy covariance: ", kalman_2d.initial_P[3][3])
+    p_err_vy_input.on_submit(lambda val: try_update_p_err_vy(val, kalman_2d))
+
+
+
     ## BUTTON
-    measurement_button = Button(plt.axes([0.05, 0.2, 0.15, 0.05]), 'Re-Measure',)
+    measurement_button = Button(plt.axes([0.05, 0.3, 0.15, 0.05]), 'Re-Measure',)
     measurement_button.on_clicked(lambda val: remeasure(endpoint, truths, pred, meas, ests, kalman_2d, cov_plots, axs, fig))
 
     # SHOW
@@ -160,8 +177,11 @@ def show_measurements_count(val, truths, pred, meas, ests, kalman_2d, covs, axs,
         l.remove()
     covs.clear()
     ellipses = create_covariance_ellipses(kalman_2d.covariances, kalman_2d.estimations[0][:endpoint], kalman_2d.estimations[1][:endpoint])
-    for ellipsis in ellipses:
-        covs.append(axs.plot(ellipsis[0], ellipsis[1], color="green"))
+    for i in range(1, len(ellipses)):
+        # if i == 0:  # cianci if you read this i'm sorry. don't worry about it
+        #     continue
+        ellipse = ellipses[i]
+        covs.append(axs.plot(ellipse[0], ellipse[1], color="green"))
     axs.relim()
     axs.autoscale_view()
     fig.canvas.draw_idle()
@@ -246,6 +266,34 @@ def try_update_err_vx(val, kalman_2d):
 def try_update_err_vy(val, kalman_2d):
     try:
         kalman_2d.observation_error_list[3] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_p_err_x(val, kalman_2d):
+    try:
+        kalman_2d.initial_P[0][0] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_p_err_y(val, kalman_2d):
+    try:
+        kalman_2d.initial_P[1][0] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_p_err_vx(val, kalman_2d):
+    try:
+        kalman_2d.initial_P[2][2] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_p_err_vy(val, kalman_2d):
+    try:
+        kalman_2d.initial_P[3][3] = float(str(val))
     except:
         print("not a float!")
         return

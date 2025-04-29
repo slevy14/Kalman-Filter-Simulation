@@ -114,24 +114,3 @@ class kalman_object:
         output_tuple = (predictions, measurements, estimations, truths, covariances)
         return output_tuple
     
-    # def generate_ground_truth(self):
-    #     truths = []
-    #     dimensions = len(self.initial_state_vector / 2)
-    #     initial_pos = []
-    #     initial_vel = []
-    #     cur_pos = initial_pos
-    #     cur_vel = initial_vel
-    #     for i in range(len(self.initial_state_vector)):
-    #         initial_pos.append(self.initial_state_vector[i])
-    #         initial_vel.append(self.initial_state_vector[i+dimensions])
-    #     for i in range(self.num_measurements):
-    #         truth = [0 for x in range(len(self.initial_state_vector))]
-    #         for j in range(dimensions):
-    #             new_pos = cur_pos[i]
-    #             new_vel = cur_vel[i]
-    #             truth[i] = new_pos
-    #             truth[i+dimensions] = new_vel
-    #             cur_pos[i] = new_pos + new_vel + (1.0/2.0)*self.control_vector[i]
-    #         truths.append(truth)
-    #     return np.array(truths)
-    
