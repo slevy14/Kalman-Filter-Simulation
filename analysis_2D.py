@@ -111,21 +111,30 @@ def show_graph(kalman_2d):
     axs.set_ylabel("meters")
 
     # textboxes
-    x0_input = TextBox(plt.axes([0.15, 0.09, 0.05, 0.025]), "initial x: ", 0)
+    x0_input = TextBox(plt.axes([0.15, 0.09, 0.05, 0.025]), "initial x: ", kalman_2d.initial_state_vector[0])
     x0_input.on_submit(lambda val: try_update_x0(val, kalman_2d))
-    y0_input = TextBox(plt.axes([0.15, 0.06, 0.05, 0.025]), "initial y: ", 0)
+    y0_input = TextBox(plt.axes([0.15, 0.06, 0.05, 0.025]), "initial y: ", kalman_2d.initial_state_vector[1])
     y0_input.on_submit(lambda val: try_update_y0(val, kalman_2d))
 
-    vx0_input = TextBox(plt.axes([0.30, 0.09, 0.05, 0.025]), "initial vx: ", 0)
+    vx0_input = TextBox(plt.axes([0.30, 0.09, 0.05, 0.025]), "initial vx: ", kalman_2d.initial_state_vector[2])
     vx0_input.on_submit(lambda val: try_update_vx0(val, kalman_2d))
-    vy0_input = TextBox(plt.axes([0.30, 0.06, 0.05, 0.025]), "initial vy: ", 0)
+    vy0_input = TextBox(plt.axes([0.30, 0.06, 0.05, 0.025]), "initial vy: ", kalman_2d.initial_state_vector[3])
     vy0_input.on_submit(lambda val: try_update_vy0(val, kalman_2d))
 
-    ax0_input = TextBox(plt.axes([0.45, 0.09, 0.05, 0.025]), "initial ax: ", 0)
+    ax0_input = TextBox(plt.axes([0.45, 0.09, 0.05, 0.025]), "initial ax: ", kalman_2d.control_vector[0])
     ax0_input.on_submit(lambda val: try_update_ax0(val, kalman_2d))
-    ay0_input = TextBox(plt.axes([0.45, 0.06, 0.05, 0.025]), "initial ay: ", 0)
+    ay0_input = TextBox(plt.axes([0.45, 0.06, 0.05, 0.025]), "initial ay: ", kalman_2d.control_vector[0])
     ay0_input.on_submit(lambda val: try_update_ay0(val, kalman_2d))
 
+    err_x_input = TextBox(plt.axes([0.60, 0.09, 0.05, 0.025]), "x error: ", kalman_2d.observation_error_list[0])
+    err_x_input.on_submit(lambda val: try_update_err_x(val, kalman_2d))
+    err_y_input = TextBox(plt.axes([0.60, 0.06, 0.05, 0.025]), "y error: ", kalman_2d.observation_error_list[1])
+    err_y_input.on_submit(lambda val: try_update_err_y(val, kalman_2d))
+
+    err_vx_input = TextBox(plt.axes([0.75, 0.09, 0.05, 0.025]), "vx error: ", kalman_2d.observation_error_list[2])
+    err_vx_input.on_submit(lambda val: try_update_err_vx(val, kalman_2d))
+    err_vy_input = TextBox(plt.axes([0.75, 0.06, 0.05, 0.025]), "vy error: ", kalman_2d.observation_error_list[3])
+    err_vy_input.on_submit(lambda val: try_update_err_vy(val, kalman_2d))
 
     ## BUTTON
     measurement_button = Button(plt.axes([0.05, 0.2, 0.15, 0.05]), 'Re-Measure',)
@@ -209,6 +218,34 @@ def try_update_ax0(val, kalman_2d):
 def try_update_ay0(val, kalman_2d):
     try:
         kalman_2d.control_vector[1] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_err_x(val, kalman_2d):
+    try:
+        kalman_2d.observation_error_list[0] = float(str(val))
+    except:
+        print("not a float!")
+        return
+    
+def try_update_err_y(val, kalman_2d):
+    try:
+        kalman_2d.observation_error_list[1] = float(str(val))
+    except:
+        print("not a float!")
+        return
+
+def try_update_err_vx(val, kalman_2d):
+    try:
+        kalman_2d.observation_error_list[2] = float(str(val))
+    except:
+        print("not a float!")
+        return
+
+def try_update_err_vy(val, kalman_2d):
+    try:
+        kalman_2d.observation_error_list[3] = float(str(val))
     except:
         print("not a float!")
         return
