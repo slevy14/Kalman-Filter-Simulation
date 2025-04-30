@@ -103,8 +103,8 @@ def show_graph(kalman_2d):
     plot_buttons.on_clicked(lambda val: toggle_line(val, lines, labels, fig))
 
     # full control
-    plot_buttons = CheckButtons(plt.axes([0.05, 0.7, 0.15, 0.06]), ["Full Control"], [True])
-    plot_buttons.on_clicked(lambda val: toggle_full_control(val, kalman_2d))
+    full_control_button = CheckButtons(plt.axes([0.05, 0.7, 0.15, 0.06]), ["Full Control"], [True])
+    full_control_button.on_clicked(lambda val: toggle_full_control(val, kalman_2d))
 
     # labels
     axs.set_xlabel("meters")
