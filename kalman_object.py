@@ -86,6 +86,9 @@ class kalman_object:
         # for each measurement:
         for i in range(len(measurements)):
             # predict state
+            # set u based on controls[i] (this allows accelleration to be removed partway through)
+            u = np.array([[x] for x in controls[i]])
+            print(u)
             mu_p = (self.A @ mu_prev) + (self.B @ u) + self.process_noise
             predictions = np.hstack((predictions, mu_p))
             # predict covariance
