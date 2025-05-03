@@ -12,7 +12,7 @@ import analysis_2D
 if __name__ == "__main__":
     # create kalman object (2d)
     # initial state
-    num_measurements = 50
+    num_measurements = 30
     x0 = 0
     y0 = 0
     vx0 = 10

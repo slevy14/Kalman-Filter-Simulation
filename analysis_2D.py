@@ -279,7 +279,7 @@ def try_update_p_err_x(val, kalman_2d):
     
 def try_update_p_err_y(val, kalman_2d):
     try:
-        kalman_2d.initial_P[1][0] = float(str(val))
+        kalman_2d.initial_P[1][1] = float(str(val))
     except:
         print("not a float!")
         return
