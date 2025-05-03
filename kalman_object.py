@@ -11,6 +11,7 @@ import analysis_2D
 
 class kalman_object:
     """ MEMBER VARS: (all initialized to None or 0, all public)
+    ---- for filter ----
     num_measurements
     initial_state_vector (mu)
     control_vector (u)
@@ -26,6 +27,14 @@ class kalman_object:
     measurement_noise (del_t)
     truth_function
     measurement_function
+
+    ---- for analysis ----
+    predictions
+    measurements
+    estimates
+    truths
+    covariances
+    full_control
     """
 
     def __init__(self, num_measurements, initial_state_vector, control_vector, dt, observation_error_list, A, B, C, Q, process_noise, process_covariance_noise, initial_P, measurement_noise, truth_function, measurement_function):
